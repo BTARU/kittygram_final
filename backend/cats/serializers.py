@@ -1,18 +1,25 @@
+"""Serializers for Cats app."""
+
 import base64
 import datetime as dt
 
-import webcolors
 from django.core.files.base import ContentFile
+
+import webcolors
 from rest_framework import serializers
 
 from .models import Achievement, AchievementCat, Cat
 
 
 class Hex2NameColor(serializers.Field):
+    """Transfers Hex colors to  colors."""
+
     def to_representation(self, value):
+        """to_representation method."""
         return value
 
     def to_internal_value(self, data):
+        """to_internal_value method."""
         try:
             data = webcolors.hex_to_name(data)
         except ValueError:
@@ -21,9 +28,13 @@ class Hex2NameColor(serializers.Field):
 
 
 class AchievementSerializer(serializers.ModelSerializer):
+    """Serializer for Achievement model."""
+
     achievement_name = serializers.CharField(source='name')
 
     class Meta:
+        """Meta class for AchievementSerializer."""
+
         model = Achievement
         fields = ('id', 'achievement_name')
 
@@ -40,6 +51,8 @@ class Base64ImageField(serializers.ImageField):
 
 
 class CatSerializer(serializers.ModelSerializer):
+    """Serializer for Cat model."""
+
     achievements = AchievementSerializer(required=False, many=True)
     color = Hex2NameColor()
     age = serializers.SerializerMethodField()
@@ -84,7 +97,8 @@ class CatSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.color = validated_data.get('color', instance.color)
         instance.birth_year = validated_data.get(
-            'birth_year', instance.birth_year
+            'birth_year',
+            instance.birth_year
         )
         instance.image = validated_data.get('image', instance.image)
 
