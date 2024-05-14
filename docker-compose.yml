@@ -28,6 +28,8 @@ services:
     env_file: .env
     ports:
       - 9000:80
-    volumes:
-      - static:/static
-      - media:/media
+    volumes_from:
+      - backend  
+    # volumes:
+    #   - static:/static
+    #   - media:/media
