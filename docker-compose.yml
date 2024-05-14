@@ -30,8 +30,6 @@ services:
       - backend
     ports:
       - 9000:80
-    volumes_from:
-      - backend  
-    # volumes:
-    #   - static:/static
-    #   - media:/media
+    volumes:
+      - static:/static
+      - media:/media/cats/images
