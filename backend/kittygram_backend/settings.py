@@ -15,18 +15,11 @@ SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
 DEBUG = bool(os.getenv('DEBUG_SET', False))
 
-# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
-# if ALLOWED_HOSTS:
-#     ALLOWED_HOSTS = ALLOWED_HOSTS.split(', ')
-# else:
-#     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    '51.250.30.149',
-    'kitty-gram.sytes.net',
-]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
+if ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ALLOWED_HOSTS.split(', ')
+else:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -75,7 +68,9 @@ WSGI_APPLICATION = 'kittygram_backend.wsgi.application'
 
 DATABASES = os.getenv('DATABASE_SET')
 if DATABASES:
-    DATABASES = eval(DATABASES)
+    DATABASES = {
+        'default': eval(DATABASES)
+    }
 else:
     DATABASES = {
         'default': {
