@@ -1,13 +1,41 @@
-### Как запустить проект:
+# Backend часть приложения Kittygram
 
-Клонировать репозиторий и перейти в него в командной строке:
+#### База Данных
+
+Для продакшен версии предполагается подключение БД PostgreSQL. Для этого нужно добавить переменную окружения DB_POSTGRES = True и остальные переменные для Postgres согласно переменной DATABASES в settings.py.
+
+### Как запустить проект(продакшен):
+
+Проект запускается в трех контейнерах Docker, связанных между собой Docker Network.
+
+Для запуска проекта на сервере Ubuntu в контейнерах docker выполните команды в терминале:
 
 ```
-git clone https://github.com/yandex-praktikum/kittygram_backend.git
+sudo docker compose -f docker-compose.production.yml up -d
+```
+
+Сбор статики и выполнений миграций БД.
+
+```
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
 ```
 
 ```
-cd kittygram_backend
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+```
+
+```
+sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
+```
+
+### Как запустить только backend часть проекта локально:
+
+Нужно изменить БД с Postgres на SQLite. Для этого удалите переменную DB_POSTGRES в файле окружения .env
+
+Выполняем команды в терминале:
+
+```
+cd backend
 ```
 
 Cоздать и активировать виртуальное окружение:
